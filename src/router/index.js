@@ -14,22 +14,34 @@ const routes = [
       {
         path: '/',
         name: 'Home',
-        component: Home
+        component: Home,
+        meta:{
+          title:'主页'
+        }
       }
     ]
   },
   {
     path: '/login',
     name: 'login',
+    meta:{
+      title:'登录页'
+    },
     component: () => import('../views/login/login.vue')
   },
   {
     path: '/register',
     name: 'register',
+    meta:{
+      title:'注册页'
+    },
     component: () => import('../views/register/register.vue')
   },
   {
     path: '*',
+    meta:{
+      title:'404'
+    },
     component: () => import( '../views/404/404.vue')
   },
 ]
@@ -44,5 +56,11 @@ export default router
 
 
 router.beforeEach((to, from, next) => {
-  console.log(to)
+   document.title=to.meta.title    
+   if(localStorage.getItem('user')){
+     next()
+   }else{
+     (to.path==='/login'||to.path==='/register')?next():next('/login')
+   }
+  
 })
